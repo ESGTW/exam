@@ -13,7 +13,7 @@ async function generateKey(password) {
 // 解密 JSON 文件
 async function decryptJSON(encrypted, password) {
     const key = await generateKey(password); // 生成 32 字節密鑰
-    const iv = Uint8Array.from(atob(encrypted.iv), c => c.charCodeAt(0)); // 將 IV 從 Base64 轉為 Uint8Array
+    const iv = Uint8Array.from(atob(encrypted.iv), c => c.charCodeAt(0)); // 將 Base64 字符串轉為 16 字節的 Uint8Array
     const encryptedData = Uint8Array.from(atob(encrypted.encryptedData), c => c.charCodeAt(0)); // 將加密數據從 Base64 轉為 Uint8Array
 
     const cryptoKey = await crypto.subtle.importKey(

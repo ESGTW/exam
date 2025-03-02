@@ -9,15 +9,15 @@ function generateKey(password) {
 // 加密 JSON 文件
 function encryptJSON(data, password) {
     const key = generateKey(password); // 生成 32 字節密鑰
-    const iv = crypto.randomBytes(16); // 生成隨機初始化向量 (IV)
+    const iv = crypto.randomBytes(16); // 生成 16 字節的隨機 IV
     const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv); // 創建加密器
     let encrypted = cipher.update(JSON.stringify(data), 'utf8', 'hex'); // 加密數據
     encrypted += cipher.final('hex'); // 完成加密
-    return { iv: iv.toString('hex'), encryptedData: encrypted }; // 返回加密後的數據和 IV
+    return { iv: iv.toString('base64'), encryptedData: encrypted }; // 返回加密後的數據和 IV（Base64 編碼）
 }
 
 // 讀取原始 JSON 文件
-const jsonData = require('10.json'); // 確保 10.json 文件存在於當前目錄
+const jsonData = require('./10.json'); // 確保 10.json 文件存在於當前目錄
 const password = '12345678'; // 加密密碼
 
 // 加密 JSON 數據
