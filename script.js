@@ -2,11 +2,12 @@ let questions = [];
 let currentQuestionIndex = 0;
 let score = 0;
 
-// 解密 JSON 文件
+// 生成 32 字節密鑰
 function generateKey(password) {
     return crypto.createHash('sha256').update(password).digest('hex').slice(0, 32);
 }
 
+// 解密 JSON 文件
 function decryptJSON(encrypted, password) {
     const key = generateKey(password); // 生成 32 字節密鑰
     const iv = Buffer.from(encrypted.iv, 'hex'); // 將 IV 從十六進制轉為 Buffer
@@ -20,12 +21,16 @@ function decryptJSON(encrypted, password) {
 async function loadQuestions() {
     try {
         const response = await fetch('10_encrypted.json'); // 加載加密文件
+        if (!response.ok) {
+            throw new Error(`HTTP 錯誤！狀態碼: ${response.status}`);
+        }
         const encryptedData = await response.json(); // 解析加密數據
         const password = '12345678'; // 解密密碼
         questions = decryptJSON(encryptedData, password); // 解密並獲取題庫
         showQuestion(); // 顯示第一題
     } catch (error) {
         console.error('加載題庫失敗:', error);
+        alert('加載題庫失敗，請檢查文件路徑或內容。');
     }
 }
 
