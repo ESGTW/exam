@@ -3,9 +3,14 @@ let currentQuestionIndex = 0;
 let score = 0;
 
 // 解密 JSON 文件
+function generateKey(password) {
+    return crypto.createHash('sha256').update(password).digest('hex').slice(0, 32);
+}
+
 function decryptJSON(encrypted, password) {
+    const key = generateKey(password); // 生成 32 字節密鑰
     const iv = Buffer.from(encrypted.iv, 'hex'); // 將 IV 從十六進制轉為 Buffer
-    const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(password), iv); // 創建解密器
+    const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key), iv); // 創建解密器
     let decrypted = decipher.update(encrypted.encryptedData, 'hex', 'utf8'); // 解密數據
     decrypted += decipher.final('utf8'); // 完成解密
     return JSON.parse(decrypted); // 返回解密後的 JSON 數據

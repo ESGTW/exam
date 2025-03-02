@@ -1,10 +1,16 @@
 const crypto = require('crypto');
 const fs = require('fs');
 
+// 生成 32 字節密鑰
+function generateKey(password) {
+    return crypto.createHash('sha256').update(password).digest('hex').slice(0, 32);
+}
+
 // 加密函數
 function encryptJSON(data, password) {
+    const key = generateKey(password); // 生成 32 字節密鑰
     const iv = crypto.randomBytes(16); // 生成隨機初始化向量 (IV)
-    const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(password), iv); // 創建加密器
+    const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(key), iv); // 創建加密器
     let encrypted = cipher.update(JSON.stringify(data), 'utf8', 'hex'); // 加密數據
     encrypted += cipher.final('hex'); // 完成加密
     return { iv: iv.toString('hex'), encryptedData: encrypted }; // 返回加密後的數據和 IV
