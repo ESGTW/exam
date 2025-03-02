@@ -3,18 +3,31 @@ let currentQuestionIndex = 0;
 let score = 0;
 
 // 生成 32 字節密鑰
-function generateKey(password) {
-    return crypto.createHash('sha256').update(password).digest('hex').slice(0, 32);
+async function generateKey(password) {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(password);
+    const hash = await crypto.subtle.digest('SHA-256', data);
+    return new Uint8Array(hash).slice(0, 32); // 返回 32 字節密鑰
 }
 
 // 解密 JSON 文件
-function decryptJSON(encrypted, password) {
-    const key = generateKey(password); // 生成 32 字節密鑰
-    const iv = Buffer.from(encrypted.iv, 'hex'); // 將 IV 從十六進制轉為 Buffer
-    const decipher = crypto.createDecipheriv('aes-256-cbc', Buffer.from(key), iv); // 創建解密器
-    let decrypted = decipher.update(encrypted.encryptedData, 'hex', 'utf8'); // 解密數據
-    decrypted += decipher.final('utf8'); // 完成解密
-    return JSON.parse(decrypted); // 返回解密後的 JSON 數據
+async function decryptJSON(encrypted, password) {
+    const key = await generateKey(password); // 生成 32 字節密鑰
+    const iv = Uint8Array.from(atob(encrypted.iv), c => c.charCodeAt(0)); // 將 IV 從 Base64 轉為 Uint8Array
+    const encryptedData = Uint8Array.from(atob(encrypted.encryptedData), c => c.charCodeAt(0)); // 將加密數據從 Base64 轉為 Uint8Array
+
+    const cryptoKey = await crypto.subtle.importKey(
+        'raw', key, { name: 'AES-CBC' }, false, ['decrypt']
+    );
+
+    const decrypted = await crypto.subtle.decrypt(
+        { name: 'AES-CBC', iv },
+        cryptoKey,
+        encryptedData
+    );
+
+    const decoder = new TextDecoder();
+    return JSON.parse(decoder.decode(decrypted)); // 返回解密後的 JSON 數據
 }
 
 // 加載題庫
@@ -26,7 +39,7 @@ async function loadQuestions() {
         }
         const encryptedData = await response.json(); // 解析加密數據
         const password = '12345678'; // 解密密碼
-        questions = decryptJSON(encryptedData, password); // 解密並獲取題庫
+        questions = await decryptJSON(encryptedData, password); // 解密並獲取題庫
         showQuestion(); // 顯示第一題
     } catch (error) {
         console.error('加載題庫失敗:', error);

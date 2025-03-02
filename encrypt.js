@@ -6,7 +6,7 @@ function generateKey(password) {
     return crypto.createHash('sha256').update(password).digest('hex').slice(0, 32);
 }
 
-// 加密函數
+// 加密 JSON 文件
 function encryptJSON(data, password) {
     const key = generateKey(password); // 生成 32 字節密鑰
     const iv = crypto.randomBytes(16); // 生成隨機初始化向量 (IV)
