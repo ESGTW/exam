@@ -3,14 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESG 測驗</title>
+    <title>ESGBT 首頁</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>ESG 測驗</h1>
-        <button onclick="startQuiz()">開始測驗</button>
-    </div>
-    <script src="script.js"></script>
+    <h1>ESG 測驗</h1>
+    <button onclick="startQuiz()">開始測驗</button>
+    <script>
+        function startQuiz() {
+            window.location.href = 'quiz.html';
+        }
+    </script>
 </body>
 </html>

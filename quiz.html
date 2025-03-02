@@ -3,21 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ESG 測驗 - 題目</title>
+    <title>ESG 測驗</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="container">
-        <h1>ESG 測驗</h1>
-        <div id="quiz-container">
-            <p id="question-number"></p>
-            <p id="question-text"></p>
-            <div id="options"></div>
-            <input type="text" id="answer-input" placeholder="輸入答案（1-4）">
-            <p id="result"></p>
-            <p id="explanation"></p>
-        </div>
+    <div id="quiz-container">
+        <h1 id="question-number"></h1>
+        <p id="question-text"></p>
+        <div id="options"></div>
+        <input type="text" id="answer-input" placeholder="輸入選項數字 (1-4)">
+        <button onclick="submitAnswer()">提交</button>
+        <div id="result"></div>
+        <div id="explanation"></div>
     </div>
+    <script src="crypto.js"></script>
     <script src="script.js"></script>
 </body>
 </html>

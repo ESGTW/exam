@@ -1,27 +1,12 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
     text-align: center;
     padding: 20px;
 }
 
-.container {
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+#quiz-container {
     max-width: 600px;
     margin: 0 auto;
-}
-
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-}
-
-#quiz-container {
-    margin-top: 20px;
 }
 
 #options {
@@ -29,11 +14,11 @@ button {
 }
 
 #result {
-    font-size: 24px;
     margin-top: 20px;
+    font-size: 24px;
 }
 
 #explanation {
-    color: #666;
-    margin-top: 10px;
+    margin-top: 20px;
+    color: red;
 }
