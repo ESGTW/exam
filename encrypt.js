@@ -17,7 +17,7 @@ function encryptJSON(data, password) {
 }
 
 // 讀取原始 JSON 文件
-const jsonData = require('./10.json'); // 確保 10.json 文件存在於當前目錄
+const jsonData = require('10.json'); // 確保 10.json 文件存在於當前目錄
 const password = '12345678'; // 加密密碼
 
 // 加密 JSON 數據
